@@ -15,7 +15,6 @@
         .menu-btn { background: none; border: none; color: #94a3b8; font-size: 22px; cursor: pointer; padding: 0 5px; transition: 0.2s; }
         .menu-btn:hover { color: #38bdf8; }
 
-        /* Botão de Pesquisa Web Ativável */
         .web-toggle-container { display: flex; align-items: center; gap: 6px; background: #111827; padding: 5px 12px; border-radius: 20px; border: 1px solid #1f2937; font-size: 12px; }
         .web-toggle-container input { cursor: pointer; accent-color: #38bdf8; }
         .web-toggle-container label { cursor: pointer; color: #94a3b8; font-weight: 600; }
@@ -35,14 +34,28 @@
         button.send-btn:hover { background: #0369a1; }
         button.send-btn:active { transform: scale(0.97); }
 
-        pre { background: #030712; padding: 12px; border-radius: 8px; margin-top: 10px; overflow-x: auto; position: relative; border: 1px solid #1f2937; }
+        /* Bloco de código com botão de copiar reposicionado embaixo */
+        pre { background: #030712; padding: 12px; padding-bottom: 35px; border-radius: 8px; margin-top: 10px; overflow-x: auto; position: relative; border: 1px solid #1f2937; }
         code { font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #38bdf8; }
-        .copy-btn { position: absolute; top: 6px; right: 6px; background: #1f2937; color: #94a3b8; border: none; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
-        .copy-btn:hover { background: #374151; color: white; }
+        
+        .copy-btn { 
+            position: absolute; 
+            bottom: 8px; 
+            right: 8px; 
+            background: #1f2937; 
+            color: #94a3b8; 
+            border: 1px solid #374151; 
+            padding: 4px 10px; 
+            font-size: 11px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        }
+        .copy-btn:hover { background: #38bdf8; color: #030712; font-weight: bold; }
 
         a { color: #38bdf8; text-decoration: underline; }
 
-        /* Sidebar Moderna */
         .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #090d16; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; border-right: 1px solid #1f2937; display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.8); }
         .sidebar.open { left: 0; }
         .sidebar-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; }
@@ -327,13 +340,10 @@ Diretrizes customizadas extras: ${customMemory}`;
             chatBox.appendChild(loadDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Verifica se o botão de pesquisa web está ativado
             const webSearchAtivo = document.getElementById('webSearchToggle').checked;
             
-            // Se web search estiver ativo, adiciona :online para o OpenRouter buscar na web e no YouTube
-            let modeloUsado = "openrouter/free";
             let corpoRequisicao = {
-                model: modeloUsado,
+                model: "openrouter/free",
                 messages: [
                     { role: "system", content: obterSystemPrompt() },
                     ...sessao.mensagens.slice(-5).map(m => ({
@@ -345,7 +355,6 @@ Diretrizes customizadas extras: ${customMemory}`;
                 max_tokens: 4000
             };
 
-            // Se ativado, injeta o plugin de busca web do OpenRouter
             if (webSearchAtivo) {
                 corpoRequisicao.plugins = [{ id: "web" }];
             }
@@ -393,7 +402,6 @@ Diretrizes customizadas extras: ${customMemory}`;
             if (classe === "ai-message" && !texto.startsWith("❌") && !texto.startsWith("⚠️") && typeof marked !== "undefined") {
                 div.innerHTML = marked.parse(texto);
                 adicionarBotoesCopiar(div);
-                // Torna links clicáveis perfeitamente
                 div.querySelectorAll("a").forEach(a => a.target = "_blank");
             } else {
                 div.innerHTML = texto.replace(/\n/g, '<br>'); 
@@ -425,4 +433,3 @@ Diretrizes customizadas extras: ${customMemory}`;
     </script>
 </body>
 </html>
-
