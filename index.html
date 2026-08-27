@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CosmoAura 3.0 - Super Laboratório Científico AI</title>
+    <title>CosmoAura 3.1 - Laboratório com Motor Científico & Constantes</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,7 +77,7 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-size: 15px; color: #38bdf8; font-weight: 700;">🪐 Laboratório 3.0</h3>
+            <h3 style="font-size: 15px; color: #38bdf8; font-weight: 700;">🪐 Laboratório 3.1</h3>
             <button class="menu-btn" onclick="fecharMenu()" style="font-size: 18px;">✕</button>
         </div>
         <div style="padding: 12px;">
@@ -89,13 +89,13 @@
     <header>
         <div class="header-title">
             <button class="menu-btn" onclick="abrirMenu()">☰</button>
-            <h1>CosmoAura 3.0</h1>
+            <h1>CosmoAura 3.1</h1>
         </div>
         
         <div style="display: flex; align-items: center; gap: 10px;">
-            <div class="web-toggle-container" title="Ativa busca e auditoria de fontes">
+            <div class="web-toggle-container" title="Ativa busca, motor de cálculo e auditoria">
                 <input type="checkbox" id="webSearchToggle" checked>
-                <label for="webSearchToggle">🌐 Pesquisa & Auditor</label>
+                <label for="webSearchToggle">🌐 Motor Científico</label>
             </div>
             <button class="menu-btn" onclick="configurarChave()" title="Configurar Chave API" style="font-size: 15px;">🔑</button>
             <button class="menu-btn" onclick="configurarCerebro()" title="Personalizar Foco" style="font-size: 15px;">🧠</button>
@@ -105,7 +105,7 @@
     <div id="chat-box"></div>
 
     <div class="input-area">
-        <textarea id="user-input" placeholder="Investigue teorias com status dinâmicos ativos..." rows="1" oninput="ajustarAltura(this)"></textarea>
+        <textarea id="user-input" placeholder="Faça cálculos, conversões ou pergunte sobre física..." rows="1" oninput="ajustarAltura(this)"></textarea>
         <button class="send-btn" onclick="enviarMensagem()">Enviar</button>
     </div>
 
@@ -118,27 +118,36 @@
 
         let customMemory = localStorage.getItem('cosmoaura_custom_memory') || "Nenhuma diretriz adicional.";
 
+        // BANCO DE CONSTANTES FÍSICAS E MATEMÁTICAS OFICIAIS PARA APOIAR OS CÁLCULOS
+        const constantesOficiais = `
+BANCO DE CONSTANTES OFICIAIS DA COHESÃO FÍSICA:
+- Velocidade da luz no vácuo (c) = 299.792.458 m/s
+- Constante Gravitacional (G) = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²
+- Constante de Planck (h) = 6.62607015 × 10⁻³⁴ J·s
+- Massa do Sol (M☉) = 1.989 × 10³⁰ kg
+- Massa da Terra (M⊕) = 5.972 × 10²⁴ kg
+- Raio Médio da Terra = 6.371 km
+- Unidade Astronômica (UA) = 149.597.870.700 m
+`;
+
         const obterSystemPrompt = () => {
-            return `Você é o CosmoAura AI 3.0, uma superinteligência científica sênior com o Módulo Auditor de Respostas ativado. 
+            return `Você é o CosmoAura AI 3.1, uma superinteligência científica sênior com Módulo de Cálculo Exato e Constantes Oficiais integradas.
 
-REGRA DE OURO SUPREMA DO AUDITOR:
-"É melhor responder 'não há evidências suficientes' do que inventar uma resposta bonita." 
-Antes de redigir qualquer resposta técnica, execute internamente o Auditor de Respostas verificando:
-1. Afirmações sem fonte ou dados suspeitos.
-2. Referências inexistentes ou URLs falsas (Proibido usar placeholders como example.com ou arxiv.org/abs/XXXXX). Se não houver fonte real, escreva: "⚠️ Fonte não localizada. Não vou inventar uma referência."
-3. Excesso de certeza em hipóteses não provadas.
+${constantesOficiais}
 
-PAINEL DO AUDITOR CIENTÍFICO (Obrigatório no topo da resposta):
-🛡️ **AUDITORIA CIENTÍFICA**
-- 🔍 Verificação de Alucinação: [Aprovada / Alerta de Incerteza]
+REGRA DE OURO DO MOTOR MATEMÁTICO:
+Sempre que o usuário pedir cálculos de física, astrofísica, conversões de unidades (como anos-luz para km) ou equações, utilize rigorosamente as constantes acima para resolver o passo a passo matemático de forma exata, sem inventar valores.
+
+PAINEL DO AUDITOR CIENTÍFICO (Obrigatório no topo de respostas técnicas):
+🛡️ **AUDITORIA & MOTOR DE CÁLCULO**
+- 🧮 Motor Matemático: [Ativo com Constantes Oficiais]
 - 📚 Fontes Reais Validadas: [Número ou Zero]
-- 🟢 Rigor Analítico: [Muito bem estabelecido / Evidência forte / Evidência limitada / Hipótese]
+- 🟢 Rigor Analítico: [Muito bem estabelecido / Evidência forte / Evidência limitada]
 
-ESTRUTURA DE RESPOSTA DO AGENTE:
+ESTRUTURA DE RESPOSTA:
 1. **🔍 Pergunta & Contexto**
-2. **💡 Evidências Verificadas**
-3. **⚖️ Contraevidências e Limitações**
-4. **🔬 Consenso Científico Atual**
+2. **🧮 Desenvolvimento Matemático & Passo a Passo** (Aplicando fórmulas e constantes oficiais)
+3. **💡 Evidências & Consenso Científico**
 
 Diretrizes extras do usuário: ${customMemory}`;
         };
@@ -194,14 +203,14 @@ Diretrizes extras do usuário: ${customMemory}`;
 
         function novoChat() {
             const novoId = 'chat_' + Date.now();
-            sessoes.unshift({ id: novoId, titulo: 'Investigação 3.0', mensagens: [] });
+            sessoes.unshift({ id: novoId, titulo: 'Investigação 3.1', mensagens: [] });
             chatAtualId = novoId;
             salvarDados();
             
             if (chatBox) {
                 chatBox.innerHTML = `
                     <div class="message ai-message">
-                        🛡️ <strong>CosmoAura 3.0 Online.</strong> Sistema com status dinâmicos ("Pesquisando...", "Pensando...", "Auditando...") ativado. O que vamos investigar hoje?
+                        🧮 <strong>CosmoAura 3.1 Online.</strong> Motor de Cálculo com Constantes Universais Oficiais e Status Dinâmicos Ativado. Faça sua pergunta ou cálculo físico!
                     </div>
                 `;
             }
@@ -212,7 +221,7 @@ Diretrizes extras do usuário: ${customMemory}`;
         function configurarCerebro() {
             fecharMenu();
             const promptAtual = customMemory === "Nenhuma diretriz adicional." ? "" : customMemory;
-            const novaInstrucao = prompt("🧠 Personalizar Foco do Auditor:", promptAtual);
+            const novaInstrucao = prompt("🧠 Personalizar Foco do Motor:", promptAtual);
             
             if (novaInstrucao !== null) {
                 customMemory = novaInstrucao.trim() || "Nenhuma diretriz adicional.";
@@ -311,7 +320,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                 if (chatBox) {
                     chatBox.innerHTML = `
                         <div class="message ai-message">
-                            🛡️ Investigação carregada. Pronto para continuar!
+                            🧮 Investigação carregada. Pronto para continuar!
                         </div>
                     `;
                 }
@@ -341,7 +350,7 @@ Diretrizes extras do usuário: ${customMemory}`;
             const sessao = sessoes.find(s => s.id === chatAtualId);
             if (!sessao) return;
 
-            if (sessao.mensagens.length === 0 && sessao.titulo === 'Investigação 3.0') {
+            if (sessao.mensagens.length === 0 && sessao.titulo === 'Investigação 3.1') {
                 sessao.titulo = textoUsuario.substring(0, 22) + (textoUsuario.length > 22 ? '...' : '');
                 carregarListaChats();
             }
@@ -356,21 +365,21 @@ Diretrizes extras do usuário: ${customMemory}`;
             loadDiv.className = "message ai-message";
             loadDiv.id = loadingId;
             
-            // STATUS DINÂMICO EM TEMPO REAL SUGERIDO PELO CHATGPT
+            // STATUS DINÂMICO EM TEMPO REAL
             if (webSearchAtivo) {
                 loadDiv.innerText = "🌐 Pesquisando em bases científicas e artigos...";
             } else {
-                loadDiv.innerText = "🧠 Pensando e estruturando raciocínio lógico...";
+                loadDiv.innerText = "🧮 Consultando constantes físicas e calculando...";
             }
             
             chatBox.appendChild(loadDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Simula transição para o Auditor logo em seguida
+            // Transição para o Auditor / Motor de Cálculo
             setTimeout(() => {
                 const loadEl = document.getElementById(loadingId);
                 if (loadEl) {
-                    loadEl.innerText = "🛡️ Auditor científico checando alucinações e rigor...";
+                    loadEl.innerText = "🛡️ Motor de cálculo executando passo a passo exato...";
                 }
             }, 1200);
 
@@ -383,7 +392,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                         content: m.texto
                     }))
                 ],
-                temperature: 0.5,
+                temperature: 0.4,
                 max_tokens: 4000
             };
 
@@ -398,7 +407,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${OR_API_KEY}`,
                         "HTTP-Referer": window.location.origin,
-                        "X-Title": "CosmoAura AI 3.0"
+                        "X-Title": "CosmoAura AI 3.1"
                     },
                     body: JSON.stringify(corpoRequisicao)
                 });
@@ -417,7 +426,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                 } else if (dados.error) {
                     renderizarMensagem("❌ Erro CosmoAura: " + dados.error.message, "error-message");
                 } else {
-                    renderizarMensagem("❌ Erro inesperado ao auditar dados.", "error-message");
+                    renderizarMensagem("❌ Erro inesperado ao processar o motor de cálculo.", "error-message");
                 }
 
             } catch (erro) {
