@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CosmoAura - Super Laboratório Científico AI</title>
+    <title>CosmoAura 3.0 - Super Laboratório Científico AI</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,11 +77,11 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-size: 15px; color: #38bdf8; font-weight: 700;">🪐 Super Laboratório</h3>
+            <h3 style="font-size: 15px; color: #38bdf8; font-weight: 700;">🪐 Laboratório 3.0</h3>
             <button class="menu-btn" onclick="fecharMenu()" style="font-size: 18px;">✕</button>
         </div>
         <div style="padding: 12px;">
-            <button onclick="novoChat()" style="width: 100%; background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s;">+ Nova Pesquisa</button>
+            <button onclick="novoChat()" style="width: 100%; background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s;">+ Nova Investigação</button>
         </div>
         <div class="history-list" id="history-list"></div>
     </div>
@@ -89,13 +89,13 @@
     <header>
         <div class="header-title">
             <button class="menu-btn" onclick="abrirMenu()">☰</button>
-            <h1>CosmoAura AI 2.0</h1>
+            <h1>CosmoAura 3.0</h1>
         </div>
         
         <div style="display: flex; align-items: center; gap: 10px;">
-            <div class="web-toggle-container" title="Ativa busca e painel científico">
+            <div class="web-toggle-container" title="Ativa busca e auditoria de fontes">
                 <input type="checkbox" id="webSearchToggle" checked>
-                <label for="webSearchToggle">🌐 Pesquisa Científica</label>
+                <label for="webSearchToggle">🌐 Pesquisa & Auditor</label>
             </div>
             <button class="menu-btn" onclick="configurarChave()" title="Configurar Chave API" style="font-size: 15px;">🔑</button>
             <button class="menu-btn" onclick="configurarCerebro()" title="Personalizar Foco" style="font-size: 15px;">🧠</button>
@@ -105,7 +105,7 @@
     <div id="chat-box"></div>
 
     <div class="input-area">
-        <textarea id="user-input" placeholder="Investigue teorias, valide premissas ou peça análises..." rows="1" oninput="ajustarAltura(this)"></textarea>
+        <textarea id="user-input" placeholder="Investigue teorias com status dinâmicos ativos..." rows="1" oninput="ajustarAltura(this)"></textarea>
         <button class="send-btn" onclick="enviarMensagem()">Enviar</button>
     </div>
 
@@ -119,27 +119,28 @@
         let customMemory = localStorage.getItem('cosmoaura_custom_memory') || "Nenhuma diretriz adicional.";
 
         const obterSystemPrompt = () => {
-            return `Você é o CosmoAura AI 2.0, uma superinteligência científica sênior especialista em Física Quântica, Astrofísica, Cosmologia e Matemática Avançada. Seu criador é um jovem cientista visionário.
+            return `Você é o CosmoAura AI 3.0, uma superinteligência científica sênior com o Módulo Auditor de Respostas ativado. 
 
-REGRA DE OURO SUPREMA:
-"É melhor responder 'não há evidências suficientes' do que inventar uma resposta bonita." Nunca invente fatos, dados experimentais, artigos ou fontes. Se não souber ou não encontrar evidências reais na web, diga explicitamente: "⚠️ Fonte não localizada. Não vou inventar uma referência."
+REGRA DE OURO SUPREMA DO AUDITOR:
+"É melhor responder 'não há evidências suficientes' do que inventar uma resposta bonita." 
+Antes de redigir qualquer resposta técnica, execute internamente o Auditor de Respostas verificando:
+1. Afirmações sem fonte ou dados suspeitos.
+2. Referências inexistentes ou URLs falsas (Proibido usar placeholders como example.com ou arxiv.org/abs/XXXXX). Se não houver fonte real, escreva: "⚠️ Fonte não localizada. Não vou inventar uma referência."
+3. Excesso de certeza em hipóteses não provadas.
 
-SISTEMA DE PAINEL CIENTÍFICO (Obrigatório iniciar cada resposta técnica com este resumo):
-📊 **PAINEL CIENTÍFICO**
-- 🔬 Pesquisa: [ON / OFF]
-- 📚 Fontes Verificadas: [Número real de fontes reais ou 0]
-- 🟢 Nível de Evidência: [Muito bem estabelecido / Evidência forte / Evidência limitada / Hipótese / Especulação / Ficção]
-- 🧠 Confiança da Resposta: [Ex: 95%] *(Nota: Confiança alta não prova que a hipótese é definitiva)*
-- 🔍 Verificação: [Concluída com sucesso / Dados insuficientes]
+PAINEL DO AUDITOR CIENTÍFICO (Obrigatório no topo da resposta):
+🛡️ **AUDITORIA CIENTÍFICA**
+- 🔍 Verificação de Alucinação: [Aprovada / Alerta de Incerteza]
+- 📚 Fontes Reais Validadas: [Número ou Zero]
+- 🟢 Rigor Analítico: [Muito bem estabelecido / Evidência forte / Evidência limitada / Hipótese]
 
-ESTRUTURA DE ANÁLISE RIGOROSA (MODO PESQUISADOR):
+ESTRUTURA DE RESPOSTA DO AGENTE:
 1. **🔍 Pergunta & Contexto**
-2. **💡 O que sabemos (Evidências Reais & Fontes):** Priorize artigos científicos, NASA, ESA, universidades, arXiv. Proibido usar placeholders como example.com ou arxiv.org/abs/XXXXX.
-3. **⚖️ Argumentos Contra / Debate Científico**
+2. **💡 Evidências Verificadas**
+3. **⚖️ Contraevidências e Limitações**
 4. **🔬 Consenso Científico Atual**
-5. **🚀 Detector de Desinformação / Premissas:** Se o usuário fizer uma pergunta com premissa falsa (ex: "planeta de diamante da NASA"), alerte imediatamente: "⚠️ A afirmação contém uma premissa incorreta." e explique o fato real.
 
-Diretrizes customizadas extras do usuário: ${customMemory}`;
+Diretrizes extras do usuário: ${customMemory}`;
         };
 
         let sessoes = [];
@@ -193,14 +194,14 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
 
         function novoChat() {
             const novoId = 'chat_' + Date.now();
-            sessoes.unshift({ id: novoId, titulo: 'Nova Investigação 2.0', mensagens: [] });
+            sessoes.unshift({ id: novoId, titulo: 'Investigação 3.0', mensagens: [] });
             chatAtualId = novoId;
             salvarDados();
             
             if (chatBox) {
                 chatBox.innerHTML = `
                     <div class="message ai-message">
-                        🚀 <strong>CosmoAura 2.0 Online.</strong> Super Laboratório com Painel Científico, Painel Anti-Alucinação e Verificação de Fontes Ativo. O que vamos investigar com rigor hoje?
+                        🛡️ <strong>CosmoAura 3.0 Online.</strong> Sistema com status dinâmicos ("Pesquisando...", "Pensando...", "Auditando...") ativado. O que vamos investigar hoje?
                     </div>
                 `;
             }
@@ -211,7 +212,7 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
         function configurarCerebro() {
             fecharMenu();
             const promptAtual = customMemory === "Nenhuma diretriz adicional." ? "" : customMemory;
-            const novaInstrucao = prompt("🧠 Personalizar Diretriz Acadêmica:", promptAtual);
+            const novaInstrucao = prompt("🧠 Personalizar Foco do Auditor:", promptAtual);
             
             if (novaInstrucao !== null) {
                 customMemory = novaInstrucao.trim() || "Nenhuma diretriz adicional.";
@@ -235,7 +236,7 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
 
         function apagarChat(event, id) {
             event.stopPropagation();
-            if (!confirm("Deseja apagar esta investigação científica?")) return;
+            if (!confirm("Deseja apagar esta investigação?")) return;
 
             sessoes = sessoes.filter(s => s.id !== id);
             if (sessoes.length === 0) {
@@ -310,7 +311,7 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
                 if (chatBox) {
                     chatBox.innerHTML = `
                         <div class="message ai-message">
-                            🔬 Investigação carregada. Pronto para continuar!
+                            🛡️ Investigação carregada. Pronto para continuar!
                         </div>
                     `;
                 }
@@ -340,7 +341,7 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
             const sessao = sessoes.find(s => s.id === chatAtualId);
             if (!sessao) return;
 
-            if (sessao.mensagens.length === 0 && sessao.titulo === 'Nova Investigação 2.0') {
+            if (sessao.mensagens.length === 0 && sessao.titulo === 'Investigação 3.0') {
                 sessao.titulo = textoUsuario.substring(0, 22) + (textoUsuario.length > 22 ? '...' : '');
                 carregarListaChats();
             }
@@ -348,16 +349,31 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
             sessao.mensagens.push({ texto: textoUsuario, classe: "user-message" });
             salvarDados();
 
+            const webSearchAtivo = document.getElementById('webSearchToggle').checked;
+
             const loadingId = "load_" + Date.now();
             const loadDiv = document.createElement("div");
             loadDiv.className = "message ai-message";
             loadDiv.id = loadingId;
-            loadDiv.innerText = "🔍 Executando auto-checagem, varredura de fontes e painel científico...";
+            
+            // STATUS DINÂMICO EM TEMPO REAL SUGERIDO PELO CHATGPT
+            if (webSearchAtivo) {
+                loadDiv.innerText = "🌐 Pesquisando em bases científicas e artigos...";
+            } else {
+                loadDiv.innerText = "🧠 Pensando e estruturando raciocínio lógico...";
+            }
+            
             chatBox.appendChild(loadDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            const webSearchAtivo = document.getElementById('webSearchToggle').checked;
-            
+            // Simula transição para o Auditor logo em seguida
+            setTimeout(() => {
+                const loadEl = document.getElementById(loadingId);
+                if (loadEl) {
+                    loadEl.innerText = "🛡️ Auditor científico checando alucinações e rigor...";
+                }
+            }, 1200);
+
             let corpoRequisicao = {
                 model: "openrouter/free",
                 messages: [
@@ -367,7 +383,7 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
                         content: m.texto
                     }))
                 ],
-                temperature: 0.6,
+                temperature: 0.5,
                 max_tokens: 4000
             };
 
@@ -382,7 +398,7 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${OR_API_KEY}`,
                         "HTTP-Referer": window.location.origin,
-                        "X-Title": "CosmoAura AI 2.0"
+                        "X-Title": "CosmoAura AI 3.0"
                     },
                     body: JSON.stringify(corpoRequisicao)
                 });
@@ -401,7 +417,7 @@ Diretrizes customizadas extras do usuário: ${customMemory}`;
                 } else if (dados.error) {
                     renderizarMensagem("❌ Erro CosmoAura: " + dados.error.message, "error-message");
                 } else {
-                    renderizarMensagem("❌ Erro inesperado ao processar dados.", "error-message");
+                    renderizarMensagem("❌ Erro inesperado ao auditar dados.", "error-message");
                 }
 
             } catch (erro) {
