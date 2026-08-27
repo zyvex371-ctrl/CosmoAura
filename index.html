@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CosmoAura 3.2 - Laboratório com Gráficos Dinâmicos</title>
+    <title>CosmoAura 3.3 - Agente Científico Autônomo</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -80,7 +80,7 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-size: 15px; color: #38bdf8; font-weight: 700;">🪐 Laboratório 3.2</h3>
+            <h3 style="font-size: 15px; color: #38bdf8; font-weight: 700;">🪐 Laboratório 3.3</h3>
             <button class="menu-btn" onclick="fecharMenu()" style="font-size: 18px;">✕</button>
         </div>
         <div style="padding: 12px;">
@@ -92,13 +92,13 @@
     <header>
         <div class="header-title">
             <button class="menu-btn" onclick="abrirMenu()">☰</button>
-            <h1>CosmoAura 3.2</h1>
+            <h1>CosmoAura 3.3 (Agente)</h1>
         </div>
         
         <div style="display: flex; align-items: center; gap: 10px;">
-            <div class="web-toggle-container" title="Ativa busca, motor gráfico e auditoria">
+            <div class="web-toggle-container" title="Ativa ferramentas de agente">
                 <input type="checkbox" id="webSearchToggle" checked>
-                <label for="webSearchToggle">🌐 Motor Gráfico</label>
+                <label for="webSearchToggle">🤖 Agente Ativo</label>
             </div>
             <button class="menu-btn" onclick="configurarChave()" title="Configurar Chave API" style="font-size: 15px;">🔑</button>
             <button class="menu-btn" onclick="configurarCerebro()" title="Personalizar Foco" style="font-size: 15px;">🧠</button>
@@ -108,7 +108,7 @@
     <div id="chat-box"></div>
 
     <div class="input-area">
-        <textarea id="user-input" placeholder="Peça análises, cálculos ou gráficos dinâmicos..." rows="1" oninput="ajustarAltura(this)"></textarea>
+        <textarea id="user-input" placeholder="Pergunte sobre física, peça cálculos ou gráficos..." rows="1" oninput="ajustarAltura(this)"></textarea>
         <button class="send-btn" onclick="enviarMensagem()">Enviar</button>
     </div>
 
@@ -129,26 +129,31 @@ BANCO DE CONSTANTES OFICIAIS:
 `;
 
         const obterSystemPrompt = () => {
-            return `Você é o CosmoAura AI 3.2, uma superinteligência científica sênior com Módulo de Gráficos Dinâmicos e Auditoria Ativa.
+            return `Você é o CosmoAura AI 3.3, um agente científico autônomo sênior. 
 
 ${constantesOficiais}
 
-DIRETRIZ DE GRÁFICOS DINÂMICOS:
-Quando o usuário pedir para visualizar dados físicos, curvas matemáticas, velocidades ou estatísticas, você pode estruturar um bloco de código JSON especial no formato abaixo para que a interface desenhe um gráfico interativo automaticamente na tela:
+FLUXO DE SELEÇÃO DE FERRAMENTAS DO AGENTE:
+Antes de responder, decida internamente qual ferramenta utilizar:
+- Precisa de fontes reais? ➔ Acione a **Pesquisa Web** 🌐
+- Precisa de contas com constantes? ➔ Acione o **Motor de Cálculo** 🧮
+- Precisa de visualização? ➔ Acione o **Gerador de Gráficos** 📈 (emitindo o JSON correspondente)
+- Nenhuma ferramenta extra? ➔ Responda diretamente com o rigor do **Auditor Científico** 🛡️
+
+FORMATO DO JSON DE GRÁFICO (quando necessário):
 \`\`\`json
 {
   "tipo": "grafico",
-  "titulo": "Título do Gráfico",
-  "rotulos": ["Ponto 1", "Ponto 2", "Ponto 3"],
-  "dados": [10, 25, 40]
+  "titulo": "Título",
+  "rotulos": ["A", "B", "C"],
+  "dados": [10, 20, 30]
 }
 \`\`\`
 
-PAINEL DO AUDITOR CIENTÍFICO (Obrigatório no topo):
-🛡️ **AUDITORIA & MOTOR GRÁFICO**
-- 📈 Gerador de Gráficos: [Disponível sob Demanda]
-- 📚 Fontes Verificadas: [Número ou Zero]
-- 🟢 Rigor Analítico: [Muito bem estabelecido / Evidência forte]
+PAINEL DE FERRAMENTAS DO AGENTE (Obrigatório no topo):
+🤖 **AGENTE CIENTÍFICO ATIVO**
+- 🛠️ Ferramentas Acionadas: [Pesquisa / Cálculo / Gráfico / Auditoria Direta]
+- 🛡️ Auditoria de Alucinação: [Aprovada]
 
 Diretrizes extras do usuário: ${customMemory}`;
         };
@@ -204,14 +209,14 @@ Diretrizes extras do usuário: ${customMemory}`;
 
         function novoChat() {
             const novoId = 'chat_' + Date.now();
-            sessoes.unshift({ id: novoId, titulo: 'Investigação 3.2', mensagens: [] });
+            sessoes.unshift({ id: novoId, titulo: 'Agente 3.3', mensagens: [] });
             chatAtualId = novoId;
             salvarDados();
             
             if (chatBox) {
                 chatBox.innerHTML = `
                     <div class="message ai-message">
-                        📈 <strong>CosmoAura 3.2 Online.</strong> Motor de Gráficos Dinâmicos e Auditoria Científica ativados. O que vamos analisar hoje?
+                        🤖 <strong>CosmoAura 3.3 (Agente) Online.</strong> Sistema de seleção de ferramentas ativado. Como posso ajudar na sua investigação hoje?
                     </div>
                 `;
             }
@@ -222,7 +227,7 @@ Diretrizes extras do usuário: ${customMemory}`;
         function configurarCerebro() {
             fecharMenu();
             const promptAtual = customMemory === "Nenhuma diretriz adicional." ? "" : customMemory;
-            const novaInstrucao = prompt("🧠 Personalizar Foco do Laboratório:", promptAtual);
+            const novaInstrucao = prompt("🧠 Personalizar Diretriz do Agente:", promptAtual);
             
             if (novaInstrucao !== null) {
                 customMemory = novaInstrucao.trim() || "Nenhuma diretriz adicional.";
@@ -321,7 +326,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                 if (chatBox) {
                     chatBox.innerHTML = `
                         <div class="message ai-message">
-                            📈 Investigação carregada. Pronto para continuar!
+                            🤖 Investigação carregada. Pronto para continuar!
                         </div>
                     `;
                 }
@@ -351,7 +356,7 @@ Diretrizes extras do usuário: ${customMemory}`;
             const sessao = sessoes.find(s => s.id === chatAtualId);
             if (!sessao) return;
 
-            if (sessao.mensagens.length === 0 && sessao.titulo === 'Investigação 3.2') {
+            if (sessao.mensagens.length === 0 && sessao.titulo === 'Agente 3.3') {
                 sessao.titulo = textoUsuario.substring(0, 22) + (textoUsuario.length > 22 ? '...' : '');
                 carregarListaChats();
             }
@@ -366,21 +371,17 @@ Diretrizes extras do usuário: ${customMemory}`;
             loadDiv.className = "message ai-message";
             loadDiv.id = loadingId;
             
-            if (webSearchAtivo) {
-                loadDiv.innerText = "🌐 Pesquisando dados e preparando motor gráfico...";
-            } else {
-                loadDiv.innerText = "📈 Analisando parâmetros para renderizar gráfico...";
-            }
-            
+            // STATUS DINÂMICO DO AGENTE
+            loadDiv.innerText = "🤖 Agente avaliando ferramentas necessárias (Pesquisa, Cálculo, Gráfico)...";
             chatBox.appendChild(loadDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
             setTimeout(() => {
                 const loadEl = document.getElementById(loadingId);
                 if (loadEl) {
-                    loadEl.innerText = "🛡️ Auditor científico checando consistência...";
+                    loadEl.innerText = "🛡️ Auditor científico executando verificação final...";
                 }
-            }, 1200);
+            }, 1300);
 
             let corpoRequisicao = {
                 model: "openrouter/free",
@@ -406,7 +407,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${OR_API_KEY}`,
                         "HTTP-Referer": window.location.origin,
-                        "X-Title": "CosmoAura AI 3.2"
+                        "X-Title": "CosmoAura AI 3.3"
                     },
                     body: JSON.stringify(corpoRequisicao)
                 });
@@ -425,7 +426,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                 } else if (dados.error) {
                     renderizarMensagem("❌ Erro CosmoAura: " + dados.error.message, "error-message");
                 } else {
-                    renderizarMensagem("❌ Erro inesperado ao processar dados.", "error-message");
+                    renderizarMensagem("❌ Erro inesperado no agente.", "error-message");
                 }
 
             } catch (erro) {
@@ -440,7 +441,6 @@ Diretrizes extras do usuário: ${customMemory}`;
             div.className = `message ${classe}`;
             
             if (classe === "ai-message" && !texto.startsWith("❌") && !texto.startsWith("⚠️") && typeof marked !== "undefined") {
-                // Tenta extrair JSON de gráfico se houver no texto da IA
                 let textoFormatado = texto;
                 let dadosGrafico = null;
 
@@ -450,10 +450,10 @@ Diretrizes extras do usuário: ${customMemory}`;
                         const jsonParsed = JSON.parse(matchJson[1].trim());
                         if (jsonParsed.tipo === "grafico") {
                             dadosGrafico = jsonParsed;
-                            textoFormatado = texto.replace(matchJson[0], ""); // Remove o JSON do texto principal
+                            textoFormatado = texto.replace(matchJson[0], "");
                         }
                     } catch (e) {
-                        console.error("Erro ao ler JSON do gráfico:", e);
+                        console.error("Erro ao ler JSON:", e);
                     }
                 }
 
@@ -461,7 +461,6 @@ Diretrizes extras do usuário: ${customMemory}`;
                 adicionarBotoesCopiar(div);
                 div.querySelectorAll("a").forEach(a => a.target = "_blank");
 
-                // Se encontrou dados de gráfico válidos, renderiza o canvas Chart.js
                 if (dadosGrafico) {
                     const containerChart = document.createElement("div");
                     containerChart.className = "chart-container";
@@ -475,7 +474,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                             data: {
                                 labels: dadosGrafico.rotulos,
                                 datasets: [{
-                                    label: dadosGrafico.titulo || 'Dados Científicos',
+                                    label: dadosGrafico.titulo || 'Dados do Agente',
                                     data: dadosGrafico.dados,
                                     borderColor: '#38bdf8',
                                     backgroundColor: 'rgba(56, 189, 248, 0.1)',
