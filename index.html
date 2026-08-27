@@ -9,19 +9,19 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07090e; color: #e1e4e8; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
-        header { background: #0d1117; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .header-title { display: flex; align-items: center; gap: 10px; }
-        h1 { font-size: 16px; color: #38bdf8; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-        .menu-btn { background: none; border: none; color: #94a3b8; font-size: 22px; cursor: pointer; padding: 0 5px; transition: 0.2s; }
+        header { background: #0d1117; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        .header-title { display: flex; align-items: center; gap: 8px; }
+        h1 { font-size: 15px; color: #38bdf8; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+        .menu-btn { background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 0 4px; transition: 0.2s; }
         .menu-btn:hover { color: #38bdf8; }
 
-        .web-toggle-container { display: flex; align-items: center; gap: 6px; background: #111827; padding: 5px 12px; border-radius: 20px; border: 1px solid #1f2937; font-size: 12px; }
+        .web-toggle-container { display: flex; align-items: center; gap: 6px; background: #111827; padding: 4px 10px; border-radius: 20px; border: 1px solid #1f2937; font-size: 11px; }
         .web-toggle-container input { cursor: pointer; accent-color: #38bdf8; }
         .web-toggle-container label { cursor: pointer; color: #94a3b8; font-weight: 600; }
         .web-toggle-container input:checked + label { color: #38bdf8; }
 
         #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; background: radial-gradient(circle at center, #0b1120 0%, #07090e 100%); }
-        .message { max-width: 85%; padding: 14px 16px; border-radius: 12px; line-height: 1.5; font-size: 14px; word-break: break-word; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .message { max-width: 88%; padding: 14px 16px; border-radius: 12px; line-height: 1.5; font-size: 14px; word-break: break-word; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .user-message { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
         .ai-message { background: #111827; color: #e5e7eb; align-self: flex-start; border: 1px solid #1f2937; border-bottom-left-radius: 2px; }
         .error-message { background: #450a0a; color: #fca5a5; align-self: center; border: 1px solid #7f1d1d; text-align: center; }
@@ -34,9 +34,9 @@
         button.send-btn:hover { background: #0369a1; }
         button.send-btn:active { transform: scale(0.97); }
 
-        /* Bloco de código com botão de copiar reposicionado embaixo */
-        pre { background: #030712; padding: 12px; padding-bottom: 35px; border-radius: 8px; margin-top: 10px; overflow-x: auto; position: relative; border: 1px solid #1f2937; }
-        code { font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #38bdf8; }
+        /* Bloco de código com botão de copiar totalmente fora da área de leitura */
+        pre { background: #030712; padding: 12px; padding-bottom: 38px; border-radius: 8px; margin-top: 12px; overflow-x: auto; position: relative; border: 1px solid #1f2937; }
+        code { font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #38bdf8; display: block; }
         
         .copy-btn { 
             position: absolute; 
@@ -93,20 +93,20 @@
             <h1>CosmoAura AI</h1>
         </div>
         
-        <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
             <div class="web-toggle-container" title="Ativa busca na web e links do YouTube em tempo real">
-                <input type="checkbox" id="webSearchToggle">
-                <label for="webSearchToggle">🌐 Pesquisa Web & YouTube</label>
+                <input type="checkbox" id="webSearchToggle" checked>
+                <label for="webSearchToggle">🌐 Pesquisa & YouTube</label>
             </div>
-            <button class="menu-btn" onclick="configurarChave()" title="Configurar Chave API" style="font-size: 16px;">🔑</button>
-            <button class="menu-btn" onclick="configurarCerebro()" title="Personalizar Especialidade" style="font-size: 16px;">🧠</button>
+            <button class="menu-btn" onclick="configurarChave()" title="Configurar Chave API" style="font-size: 15px;">🔑</button>
+            <button class="menu-btn" onclick="configurarCerebro()" title="Personalizar Especialidade" style="font-size: 15px;">🧠</button>
         </div>
     </header>
 
     <div id="chat-box"></div>
 
     <div class="input-area">
-        <textarea id="user-input" placeholder="Pergunte sobre Física Quântica, Astrofísica, Matemática ou peça links de vídeos..." rows="1" oninput="ajustarAltura(this)"></textarea>
+        <textarea id="user-input" placeholder="Pergunte sobre Física, Matemática ou peça links de vídeos..." rows="1" oninput="ajustarAltura(this)"></textarea>
         <button class="send-btn" onclick="enviarMensagem()">Enviar</button>
     </div>
 
@@ -120,10 +120,19 @@
         let customMemory = localStorage.getItem('cosmoaura_custom_memory') || "Nenhuma diretriz adicional.";
 
         const obterSystemPrompt = () => {
-            return `Você é o CosmoAura AI, uma inteligência artificial sênior, mestre absoluta e especialista em Ciências (Física Quântica, Astrofísica, Cosmologia, Espaço-Tempo, Buracos Negros, Novos Materiais) e Matemática Avançada. 
-Seu criador e usuário é um jovem cientista fascinado por desvendar os maiores mistérios do universo e trabalhar na NASA no futuro.
-DIRETRIZ DE PESQUISA & VÍDEOS: Quando o usuário pedir vídeos (ex: "me mostre 3 vídeos sobre matéria escura"), você DEVE pesquisar na web (se a busca estiver ativa) e retornar links reais e diretos do YouTube em formato Markdown clicável (ex: [Título do Vídeo](https://www.youtube.com/watch?v=...)), garantindo que ele possa apenas clicar para assistir. Responda sempre com profundidade científica, exatidão matemática, clareza e uma pitada de fascínio pelo cosmos.
-Diretrizes customizadas extras: ${customMemory}`;
+            return `Você é o CosmoAura AI, uma super inteligência científica sênior e mestre absoluta em Ciências (Física Quântica, Astrofísica, Cosmologia, Espaço-Tempo) e Matemática Avançada.
+Seu criador é um jovem cientista visionário apaixonado pelo universo.
+
+ESTRUTURA OBRIGATÓRIA DAS RESPOSTAS CIENTÍFICAS:
+Em cada afirmação técnica ou resposta principal, utilize rigor científico rigoroso estruturado nestes marcadores visuais para classificar o conhecimento:
+- **Fato Confirmado ✅**: Para leis físicas consolidadas, dados da NASA/artigos validados.
+- **Hipótese 🟡**: Para modelos matemáticos e teorias em estudo.
+- **Especulação 🔵**: Para extrapolações lógicas ou físicas avançadas.
+- **Ficção Científica 🚀**: Para conceitos de cultura pop (como portais de Rick and Morty, viagem no tempo reversível por mágica, etc.), indicando claramente o nível de viabilidade tecnológica (Existe na ciência: X / Teoricamente possível: Y / Não temos tecnologia: Z).
+
+DIRETRIZ DE VÍDEOS E PESQUISA: Quando o usuário pedir vídeos (ex: "me mostre 3 vídeos sobre matéria escura"), você DEVE usar a pesquisa web para retornar links reais, diretos e clicáveis do YouTube em formato Markdown (ex: [Título](URL)).
+
+Diretrizes extras definidas pelo usuário: ${customMemory}`;
         };
 
         let sessoes = [];
@@ -184,7 +193,7 @@ Diretrizes customizadas extras: ${customMemory}`;
             if (chatBox) {
                 chatBox.innerHTML = `
                     <div class="message ai-message">
-                        🌌 <strong>CosmoAura Online.</strong> Olá! Estou pronta para explorar os mistérios da física quântica, astrofísica, matemática avançada ou buscar vídeos científicos para você. O que vamos desvendar hoje?
+                        🌌 <strong>CosmoAura Modo Cientista Ativo.</strong> Pronta para analisar dados sob os critérios de Fatos, Hipóteses, Especulações e Ficção Científica. O que vamos investigar?
                     </div>
                 `;
             }
@@ -294,7 +303,7 @@ Diretrizes customizadas extras: ${customMemory}`;
                 if (chatBox) {
                     chatBox.innerHTML = `
                         <div class="message ai-message">
-                            🌌 Investigação carregada. Pronto para continuar a exploração!
+                            🌌 Investigação carregada. Pronto para continuar!
                         </div>
                     `;
                 }
@@ -336,7 +345,7 @@ Diretrizes customizadas extras: ${customMemory}`;
             const loadDiv = document.createElement("div");
             loadDiv.className = "message ai-message";
             loadDiv.id = loadingId;
-            loadDiv.innerText = "🔭 Calculando dados estelares...";
+            loadDiv.innerText = "🔭 Verificando evidências e cruzando dados com o cosmos...";
             chatBox.appendChild(loadDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -385,7 +394,7 @@ Diretrizes customizadas extras: ${customMemory}`;
                 } else if (dados.error) {
                     renderizarMensagem("❌ Erro CosmoAura: " + dados.error.message, "error-message");
                 } else {
-                    renderizarMensagem("❌ Erro inesperado ao processar dados do cosmos.", "error-message");
+                    renderizarMensagem("❌ Erro inesperado ao processar dados.", "error-message");
                 }
 
             } catch (erro) {
