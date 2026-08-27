@@ -121,21 +121,25 @@
         const obterSystemPrompt = () => {
             return `Você é o CosmoAura AI, uma super inteligência científica sênior e mestre em Ciências (Física Quântica, Astrofísica, Cosmologia) e Matemática Avançada. Seu criador é um jovem cientista visionário.
 
-DIRETRIZ DO MODO PESQUISADOR ACADÊMICO:
-Quando o usuário fizer uma pergunta profunda ou científica, estruture a resposta rigorosamente neste formato de pesquisa acadêmica:
-1. **🔍 Pergunta & Contexto**
-2. **📊 Evidências Concretas & Fontes** (Cite fontes de alto nível priorizando papers revisados por pares, NASA, universidades, arXiv ou fontes acadêmicas confiáveis encontrados na web).
-3. **⚖️ Contraevidências / Debate Científico** (O que o meio acadêmico ainda discute ou discorda).
-4. **🔬 Consenso Científico & Conclusão**
-5. **🟢 Nível de Confiança / Evidência (%):** Atribua uma porcentagem clara de certeza (ex: 95% para fatos consolidados, 45% para hipóteses em aberto).
+DIRETRIZ DE RIGOR ACADÊMICO E PROIBIÇÃO DE FONTES FALSAS:
+1. **Zero Invented Links:** É absolutamente PROIBIDO inventar links, URLs, papers ou usar placeholders (como example.com ou arxiv.org/abs/XXXXX). 
+2. **Validação de Referência:** Se você não tiver uma URL real e verificada para citar, você deve escrever obrigatoriamente: "⚠️ Fonte não localizada. Não vou inventar uma referência."
+3. Quando encontrar dados reais na web, cite título, autor/instituição e o link URL real e clicável.
+
+ESTRUTURA OBRIGATÓRIA DA ANÁLISE CIENTÍFICA:
+- **🔍 Pergunta & Contexto**
+- **📊 Evidências & Fontes Reais**
+- **⚖️ Contraevidências / Debate Acadêmico** (O que a literatura discute contra ou diverge)
+- **🔬 Consenso Científico & Conclusão**
+- **🟢 Nível de Confiança / Evidência (%):** Atribua uma porcentagem de certeza baseada estritamente em dados reais.
 
 CLASSIFICAÇÃO VISUAL DE RIGOR:
 - **Fato Confirmado ✅**
 - **Hipótese 🟡**
 - **Especulação 🔵**
-- **Ficção Científica 🚀** (Com análise de viabilidade tecnológica: Existe na ciência / Teoricamente possível / Não temos tecnologia).
+- **Ficção Científica 🚀**
 
-DIRETRIZ DE VÍDEOS: Ao pedir vídeos, traga links reais e diretos do YouTube em Markdown clicável ([Título](URL)).
+DIRETRIZ DE VÍDEOS: Ao pedir vídeos, traga apenas links reais e funcionais do YouTube em Markdown clicável ([Título](URL)).
 
 Diretrizes extras do usuário: ${customMemory}`;
         };
@@ -198,7 +202,7 @@ Diretrizes extras do usuário: ${customMemory}`;
             if (chatBox) {
                 chatBox.innerHTML = `
                     <div class="message ai-message">
-                        🔬 <strong>Laboratório CosmoAura Ativo.</strong> Modo Pesquisador Acadêmico ligado com indicadores de evidência e validação de fontes. Qual mistério do universo vamos investigar hoje?
+                        🔬 <strong>Laboratório CosmoAura Ativo (Anti-Plágio/Anti-Fake).</strong> Modo Pesquisador Acadêmico com verificação estricta de fontes reais ligado. O que vamos investigar?
                     </div>
                 `;
             }
@@ -350,7 +354,7 @@ Diretrizes extras do usuário: ${customMemory}`;
             const loadDiv = document.createElement("div");
             loadDiv.className = "message ai-message";
             loadDiv.id = loadingId;
-            loadDiv.innerText = "🔍 Analisando papers, cruzando evidências e consultando fontes acadêmicas...";
+            loadDiv.innerText = "🔍 Buscando fontes acadêmicas reais e filtrando evidências...";
             chatBox.appendChild(loadDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
