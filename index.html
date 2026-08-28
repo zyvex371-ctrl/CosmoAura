@@ -2,73 +2,50 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CosmoAura 3.4 - Laboratório Científico Definitivo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CosmoAura 3.4 - Simulador Científico</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07090e; color: #e1e4e8; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #070b14; color: #f8fafc; display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
         
-        header { background: #0d1117; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        header { background: #0f172a; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; z-index: 10; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
         .header-title { display: flex; align-items: center; gap: 8px; }
-        h1 { font-size: 15px; color: #38bdf8; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-        .menu-btn { background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 0 4px; transition: 0.2s; }
+        h1 { font-size: 16px; color: #38bdf8; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+        .menu-btn { background: none; border: none; color: #94a3b8; font-size: 22px; cursor: pointer; padding: 4px; transition: 0.2s; }
         .menu-btn:hover { color: #38bdf8; }
 
-        .web-toggle-container { display: flex; align-items: center; gap: 6px; background: #111827; padding: 4px 10px; border-radius: 20px; border: 1px solid #1f2937; font-size: 11px; }
-        .web-toggle-container input { cursor: pointer; accent-color: #38bdf8; }
-        .web-toggle-container label { cursor: pointer; color: #94a3b8; font-weight: 600; }
-        .web-toggle-container input:checked + label { color: #38bdf8; }
+        /* CHAT BOX COM ROLAGEM CORRETA E ESPAÇO LIVRE NO FUNDO */
+        #chat-box { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; background: radial-gradient(circle at center, #0f172a 0%, #070b14 100%); padding-bottom: 30px; }
+        .message { max-width: 90%; padding: 14px 16px; border-radius: 12px; line-height: 1.5; font-size: 14px; word-break: break-word; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; }
+        .user-message { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .ai-message { background: #1e293b; color: #f1f5f9; align-self: flex-start; border: 1px solid #334155; border-bottom-left-radius: 2px; }
+        .error-message { background: #450a0a; color: #fca5a5; align-self: center; border: 1px solid #7f1d1d; text-align: center; font-weight: 500; }
 
-        #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; background: radial-gradient(circle at center, #0b1120 0%, #07090e 100%); }
-        .message { max-width: 88%; padding: 14px 16px; border-radius: 12px; line-height: 1.5; font-size: 14px; word-break: break-word; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .user-message { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .ai-message { background: #111827; color: #e5e7eb; align-self: flex-start; border: 1px solid #1f2937; border-bottom-left-radius: 2px; }
-        .error-message { background: #450a0a; color: #fca5a5; align-self: center; border: 1px solid #7f1d1d; text-align: center; }
-
-        .input-area { background: #0d1117; padding: 15px; display: flex; gap: 10px; border-top: 1px solid #1f2937; align-items: flex-end; }
-        textarea { flex: 1; background: #111827; border: 1px solid #374151; color: white; padding: 12px; border-radius: 8px; font-size: 14px; outline: none; resize: none; max-height: 120px; font-family: inherit; line-height: 1.4; transition: 0.2s; }
+        /* BARRA DE INPUT FIXA QUE NUNCA FICA ESCONDIDA */
+        .input-area { background: #0f172a; padding: 12px 16px; display: flex; gap: 10px; border-top: 1px solid #1e293b; align-items: flex-end; flex-shrink: 0; z-index: 50; }
+        textarea { flex: 1; background: #070b14; border: 1px solid #334155; color: white; padding: 10px 12px; border-radius: 8px; font-size: 14px; outline: none; resize: none; max-height: 120px; font-family: inherit; line-height: 1.4; transition: 0.2s; }
         textarea:focus { border-color: #38bdf8; box-shadow: 0 0 8px rgba(56, 189, 248, 0.2); }
-        textarea::placeholder { color: #6b7280; }
-        button.send-btn { background: #0284c7; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; height: 46px; font-size: 14px; flex-shrink: 0; transition: 0.2s; }
-        button.send-btn:hover { background: #0369a1; }
-        button.send-btn:active { transform: scale(0.97); }
+        textarea::placeholder { color: #64748b; }
 
-        pre { background: #030712; padding: 12px; padding-bottom: 38px; border-radius: 8px; margin-top: 12px; overflow-x: auto; position: relative; border: 1px solid #1f2937; }
-        code { font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #38bdf8; display: block; }
-        
-        .copy-btn { 
-            position: absolute; 
-            bottom: 8px; 
-            right: 8px; 
-            background: #1f2937; 
-            color: #94a3b8; 
-            border: 1px solid #374151; 
-            padding: 4px 10px; 
-            font-size: 11px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            transition: 0.2s; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-        }
-        .copy-btn:hover { background: #38bdf8; color: #030712; font-weight: bold; }
+        button.send-btn { background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; height: 42px; font-size: 14px; flex-shrink: 0; transition: 0.2s; pointer-events: auto; }
+        button.send-btn:active { background: #0369a1; transform: scale(0.96); }
 
-        .chart-container { background: #030712; padding: 12px; border-radius: 8px; margin-top: 12px; border: 1px solid #1f2937; position: relative; height: 220px; width: 100%; }
+        .msg-actions { display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #334155; padding-top: 8px; }
+        .speak-btn { background: #334155; color: #cbd5e1; border: none; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        .speak-btn:hover { background: #38bdf8; color: #070b14; font-weight: bold; }
 
-        a { color: #38bdf8; text-decoration: underline; }
+        pre { background: #030712; padding: 10px; border-radius: 6px; margin-top: 8px; overflow-x: auto; border: 1px solid #1e293b; }
+        code { font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #38bdf8; }
 
-        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #090d16; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; border-right: 1px solid #1f2937; display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.8); }
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #070b14; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; border-right: 1px solid #1e293b; display: flex; flex-direction: column; box-shadow: 10px 0 30px rgba(0,0,0,0.8); }
         .sidebar.open { left: 0; }
-        .sidebar-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; }
+        .sidebar-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; }
         .history-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-        .history-item { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #94a3b8; background: #111827; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent; transition: 0.2s; }
-        .history-item:hover { background: #1f2937; color: #e5e7eb; }
-        .history-item.active { color: white; background: #1e293b; border: 1px solid #38bdf8; }
+        .history-item { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #94a3b8; background: #0f172a; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent; transition: 0.2s; }
+        .history-item:hover { background: #1e293b; color: #f1f5f9; }
+        .history-item.active { color: white; background: #0f172a; border: 1px solid #38bdf8; }
         .history-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 8px; }
-        .action-btns { display: flex; gap: 6px; }
-        .rename-btn { background: none; border: none; cursor: pointer; font-size: 13px; padding: 2px; color: #6b7280; transition: 0.2s; }
-        .rename-btn:hover { color: #38bdf8; }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(2px); display: none; z-index: 99; }
         .overlay.active { display: block; }
@@ -80,11 +57,11 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-size: 15px; color: #38bdf8; font-weight: 700;">🪐 CosmoAura 3.4</h3>
+            <h3 style="font-size: 15px; color: #38bdf8; font-weight: 700;">🪐 CosmoAura Laboratório</h3>
             <button class="menu-btn" onclick="fecharMenu()" style="font-size: 18px;">✕</button>
         </div>
         <div style="padding: 12px;">
-            <button onclick="novoChat()" style="width: 100%; background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s;">+ Nova Investigação</button>
+            <button onclick="novoChat()" style="width: 100%; background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s;">+ Nova Simulação</button>
         </div>
         <div class="history-list" id="history-list"></div>
     </div>
@@ -92,93 +69,56 @@
     <header>
         <div class="header-title">
             <button class="menu-btn" onclick="abrirMenu()">☰</button>
-            <h1>CosmoAura 3.4 (Definitiva)</h1>
+            <h1>CosmoAura 3.4</h1>
         </div>
-        
         <div style="display: flex; align-items: center; gap: 10px;">
-            <div class="web-toggle-container" title="Ativa simulador e ferramentas">
-                <input type="checkbox" id="webSearchToggle" checked>
-                <label for="webSearchToggle">🔬 Laboratório Ativo</label>
-            </div>
-            <button class="menu-btn" onclick="configurarChave()" title="Configurar Chave API" style="font-size: 15px;">🔑</button>
-            <button class="menu-btn" onclick="configurarCerebro()" title="Personalizar Foco" style="font-size: 15px;">🧠</button>
+            <button class="menu-btn" onclick="configurarChave()" title="Configurar Chave API" style="font-size: 16px;">🔑</button>
         </div>
     </header>
 
     <div id="chat-box"></div>
 
     <div class="input-area">
-        <textarea id="user-input" placeholder="Faça simulações, peça gráficos ou investigue a física..." rows="1" oninput="ajustarAltura(this)"></textarea>
-        <button class="send-btn" onclick="enviarMensagem()">Enviar</button>
+        <textarea id="user-input" placeholder="Digite sua simulação ou pergunta científica..." rows="1" oninput="ajustarAltura(this)"></textarea>
+        <button class="send-btn" id="sendBtn">Enviar</button>
     </div>
 
     <script>
-        let OR_API_KEY = localStorage.getItem('cosmoaura_or_key') || "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";
-        localStorage.setItem('cosmoaura_or_key', OR_API_KEY);
+        let OR_API_KEY = localStorage.getItem('cosmo_or_key') || "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";
+        localStorage.setItem('cosmo_or_key', OR_API_KEY);
 
         const chatBox = document.getElementById("chat-box");
         const userInput = document.getElementById("user-input");
+        const sendBtn = document.getElementById("sendBtn");
 
-        let customMemory = localStorage.getItem('cosmoaura_custom_memory') || "Nenhuma diretriz adicional.";
-
-        const constantesOficiais = `
-BANCO DE CONSTANTES OFICIAIS:
-- Velocidade da luz (c) = 299.792.458 m/s
-- Constante Gravitacional (G) = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²
-- Constante de Planck (h) = 6.62607015 × 10⁻³⁴ J·s
-`;
-
-        const obterSystemPrompt = () => {
-            return `Você é o CosmoAura AI 3.4, a versão definitiva do laboratório científico autônomo sênior. 
-
-${constantesOficiais}
-
-MÓDULO DE SIMULAÇÃO (MODO EXPERIMENTO LITE):
-Quando o usuário pedir simulações virtuais (ex: "E se dobrássemos a massa da Terra?", "Simule a queda de um objeto", "Colisão de asteroides"), você deve estruturar a resposta no formato de relatório de experimento:
-- **🧪 Variável Alterada / Parâmetro**
-- **📊 Consequências Físicas & Cálculo**
-- **⚠️ Limitações do Modelo**
-- E, se aplicável, gere o JSON de gráfico para visualização interativa.
-
-FORMATO DO JSON DE GRÁFICO (para renderizar na tela):
-\`\`\`json
-{
-  "tipo": "grafico",
-  "titulo": "Título da Simulação",
-  "rotulos": ["Passo 1", "Passo 2", "Passo 3"],
-  "dados": [10, 25, 50]
-}
-\`\`\`
-
-PAINEL CIENTÍFICO DEFICITIVO (Obrigatório no topo):
-🔬 **COSMOAURA LAB - RELATÓRIO DE SIMULAÇÃO**
-- 🧪 Modo Experimento: [Ativo / Simulação Física]
-- 🛡️ Auditoria de Alucinação: [Aprovada com Rigor]
-
-Diretrizes extras do usuário: ${customMemory}`;
-        };
+        const systemPromptCosmo = `Você é a CosmoAura 3.4, uma inteligência artificial científica especializada em astrofísica, física teórica e simulações de "E se...?".
+- Sempre que o usuário propor um cenário hipotético, faça uma análise rigorosa estruturada em Relatório de Laboratório.
+- Apresente fatos estabelecidos, cálculos passo a passo com equações formatadas, hipóteses e consequências.
+- No final de cada resposta, faça uma auditoria rigorosa da própria resposta procurando erros, unidades incorretas ou conclusões exageradas.
+- Seja técnica, precisa e didática.`;
 
         let sessoes = [];
         try {
-            sessoes = JSON.parse(localStorage.getItem('cosmoaura_chats')) || [];
+            sessoes = JSON.parse(localStorage.getItem('cosmo_chats')) || [];
         } catch (e) {
             sessoes = [];
         }
 
-        let chatAtualId = localStorage.getItem('cosmoaura_atual_id') || null;
+        let chatAtualId = localStorage.getItem('cosmo_atual_id') || null;
 
         window.onload = function() {
-            try {
-                carregarListaChats();
-                if (sessoes.length === 0 || !chatAtualId) {
-                    novoChat();
-                } else {
-                    carregarChat(chatAtualId);
-                }
-            } catch (err) {
-                console.error("Erro ao iniciar:", err);
+            carregarListaChats();
+            if (sessoes.length === 0 || !chatAtualId) {
                 novoChat();
+            } else {
+                carregarChat(chatAtualId);
             }
+
+            sendBtn.addEventListener('click', enviarMensagem);
+            sendBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                enviarMensagem();
+            });
         };
 
         function configurarChave() {
@@ -187,8 +127,8 @@ Diretrizes extras do usuário: ${customMemory}`;
             const nova = prompt("🔑 Digite ou cole sua chave do OpenRouter (sk-or-v1-...):", atual);
             if (nova !== null && nova.trim() !== "") {
                 OR_API_KEY = nova.trim();
-                localStorage.setItem('cosmoaura_or_key', OR_API_KEY);
-                alert("✅ Chave atualizada com sucesso!");
+                localStorage.setItem('cosmo_or_key', OR_API_KEY);
+                alert("✅ Chave atualizada!");
             }
         }
 
@@ -209,14 +149,14 @@ Diretrizes extras do usuário: ${customMemory}`;
 
         function novoChat() {
             const novoId = 'chat_' + Date.now();
-            sessoes.unshift({ id: novoId, titulo: 'Laboratório 3.4', mensagens: [] });
+            sessoes.unshift({ id: novoId, titulo: 'Nova Simulação', mensagens: [] });
             chatAtualId = novoId;
             salvarDados();
             
             if (chatBox) {
                 chatBox.innerHTML = `
                     <div class="message ai-message">
-                        🔬 <strong>CosmoAura 3.4 (Definitiva) Online.</strong> Simulador de Física Lite, Gráficos Dinâmicos e Auditoria Ativados. Qual experimento vamos rodar hoje?
+                        🪐 Olá! Eu sou a <strong>CosmoAura 3.4</strong>, sua IA de simulações científicas e astrofísica. Digite um cenário de "E se...?" ou um pedido de cálculo para iniciarmos o relatório de laboratório!
                     </div>
                 `;
             }
@@ -224,52 +164,10 @@ Diretrizes extras do usuário: ${customMemory}`;
             fecharMenu();
         }
 
-        function configurarCerebro() {
-            fecharMenu();
-            const promptAtual = customMemory === "Nenhuma diretriz adicional." ? "" : customMemory;
-            const novaInstrucao = prompt("🧠 Personalizar Foco do Laboratório:", promptAtual);
-            
-            if (novaInstrucao !== null) {
-                customMemory = novaInstrucao.trim() || "Nenhuma diretriz adicional.";
-                localStorage.setItem('cosmoaura_custom_memory', customMemory);
-                alert("✅ Diretriz atualizada!");
-            }
-        }
-
-        function renomearChat(event, id) {
-            event.stopPropagation();
-            const sessao = sessoes.find(s => s.id === id);
-            if (!sessao) return;
-
-            const novoNome = prompt("Renomear pesquisa:", sessao.titulo);
-            if (novoNome && novoNome.trim() !== "") {
-                sessao.titulo = novoNome.trim();
-                salvarDados();
-                carregarListaChats();
-            }
-        }
-
-        function apagarChat(event, id) {
-            event.stopPropagation();
-            if (!confirm("Deseja apagar esta investigação?")) return;
-
-            sessoes = sessoes.filter(s => s.id !== id);
-            if (sessoes.length === 0) {
-                novoChat();
-            } else {
-                if (chatAtualId === id) {
-                    carregarChat(sessoes[0].id);
-                } else {
-                    salvarDados();
-                    carregarListaChats();
-                }
-            }
-        }
-
         function salvarDados() {
             try {
-                localStorage.setItem('cosmoaura_chats', JSON.stringify(sessoes));
-                localStorage.setItem('cosmoaura_atual_id', chatAtualId);
+                localStorage.setItem('cosmo_chats', JSON.stringify(sessoes));
+                localStorage.setItem('cosmo_atual_id', chatAtualId);
             } catch (e) {
                 console.error("Erro ao salvar:", e);
             }
@@ -287,27 +185,9 @@ Diretrizes extras do usuário: ${customMemory}`;
                 const spanTexto = document.createElement('span');
                 spanTexto.className = 'history-text';
                 spanTexto.innerText = sessao.titulo;
-                
-                const btnContainer = document.createElement('div');
-                btnContainer.className = 'action-btns';
-
-                const btnRenomear = document.createElement('button');
-                btnRenomear.className = 'rename-btn';
-                btnRenomear.innerHTML = '✏️';
-                btnRenomear.onclick = (e) => renomearChat(e, sessao.id);
-
-                const btnApagar = document.createElement('button');
-                btnApagar.className = 'rename-btn';
-                btnApagar.innerHTML = '🗑️';
-                btnApagar.onclick = (e) => apagarChat(e, sessao.id);
-
-                btnContainer.appendChild(btnRenomear);
-                btnContainer.appendChild(btnApagar);
 
                 item.appendChild(spanTexto);
-                item.appendChild(btnContainer);
                 item.onclick = () => carregarChat(sessao.id);
-                
                 listDiv.appendChild(item);
             });
         }
@@ -324,11 +204,7 @@ Diretrizes extras do usuário: ${customMemory}`;
             
             if (sessao.mensagens.length === 0) {
                 if (chatBox) {
-                    chatBox.innerHTML = `
-                        <div class="message ai-message">
-                            🔬 Laboratório carregado. Pronto para continuar!
-                        </div>
-                    `;
+                    chatBox.innerHTML = `<div class="message ai-message">🪐 Laboratório pronto. Qual simulação vamos rodar?</div>`;
                 }
             } else {
                 sessao.mensagens.forEach(msg => {
@@ -340,64 +216,53 @@ Diretrizes extras do usuário: ${customMemory}`;
 
         async function enviarMensagem() {
             if (!OR_API_KEY || !OR_API_KEY.startsWith("sk-or-")) {
-                alert("⚠️ Insira uma chave do OpenRouter válida.");
+                alert("⚠️ Insira uma chave OpenRouter válida.");
                 configurarChave();
                 return;
             }
 
-            if (!userInput) return;
             const textoUsuario = userInput.value.trim();
             if (textoUsuario === "") return;
 
             renderizarMensagem(textoUsuario, "user-message");
+            
             userInput.value = "";
             userInput.style.height = 'auto';
 
             const sessao = sessoes.find(s => s.id === chatAtualId);
             if (!sessao) return;
 
-            if (sessao.mensagens.length === 0 && sessao.titulo === 'Laboratório 3.4') {
-                sessao.titulo = textoUsuario.substring(0, 22) + (textoUsuario.length > 22 ? '...' : '');
+            if (sessao.mensagens.length === 0 && sessao.titulo === 'Nova Simulação') {
+                sessao.titulo = textoUsuario.substring(0, 22) + '...';
                 carregarListaChats();
             }
 
             sessao.mensagens.push({ texto: textoUsuario, classe: "user-message" });
             salvarDados();
 
-            const webSearchAtivo = document.getElementById('webSearchToggle').checked;
-
             const loadingId = "load_" + Date.now();
             const loadDiv = document.createElement("div");
             loadDiv.className = "message ai-message";
             loadDiv.id = loadingId;
-            
-            loadDiv.innerText = "🧪 Configurando parâmetros do experimento físico...";
+            loadDiv.innerText = "⚡ Executando cálculos e gerando relatório de laboratório...";
             chatBox.appendChild(loadDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            setTimeout(() => {
-                const loadEl = document.getElementById(loadingId);
-                if (loadEl) {
-                    loadEl.innerText = "🛡️ Auditor científico rodando simulação e checando rigor...";
-                }
-            }, 1300);
+            let historicoRecente = sessao.mensagens.slice(-4, -1).map(m => ({
+                role: m.classe === "user-message" ? "user" : "assistant",
+                content: m.texto
+            }));
 
             let corpoRequisicao = {
-                model: "openrouter/free",
+                model: "google/gemini-2.5-flash",
                 messages: [
-                    { role: "system", content: obterSystemPrompt() },
-                    ...sessao.mensagens.slice(-5).map(m => ({
-                        role: m.classe === "user-message" ? "user" : "assistant",
-                        content: m.texto
-                    }))
+                    { role: "system", content: systemPromptCosmo },
+                    ...historicoRecente,
+                    { role: "user", content: textoUsuario }
                 ],
                 temperature: 0.4,
-                max_tokens: 4000
+                max_tokens: 1500
             };
-
-            if (webSearchAtivo) {
-                corpoRequisicao.plugins = [{ id: "web" }];
-            }
 
             try {
                 const resposta = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -406,7 +271,7 @@ Diretrizes extras do usuário: ${customMemory}`;
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${OR_API_KEY}`,
                         "HTTP-Referer": window.location.origin,
-                        "X-Title": "CosmoAura AI 3.4"
+                        "X-Title": "CosmoAura"
                     },
                     body: JSON.stringify(corpoRequisicao)
                 });
@@ -423,15 +288,15 @@ Diretrizes extras do usuário: ${customMemory}`;
                     renderizarMensagem(textoIA, "ai-message");
 
                 } else if (dados.error) {
-                    renderizarMensagem("❌ Erro CosmoAura: " + dados.error.message, "error-message");
+                    renderizarMensagem("⚠️ Erro de cota/créditos no OpenRouter. Toque na chave (🔑) e insira uma chave válida.", "error-message");
                 } else {
-                    renderizarMensagem("❌ Erro inesperado no laboratório.", "error-message");
+                    renderizarMensagem("⚠️ Erro ao processar simulação.", "error-message");
                 }
 
             } catch (erro) {
                 const loadEl = document.getElementById(loadingId);
                 if (loadEl) loadEl.remove();
-                renderizarMensagem("❌ Erro de conexão com o satélite OpenRouter.", "error-message");
+                renderizarMensagem("⚠️ Erro de conexão com a API.", "error-message");
             }
         }
 
@@ -439,88 +304,43 @@ Diretrizes extras do usuário: ${customMemory}`;
             const div = document.createElement("div");
             div.className = `message ${classe}`;
             
-            if (classe === "ai-message" && !texto.startsWith("❌") && !texto.startsWith("⚠️") && typeof marked !== "undefined") {
-                let textoFormatado = texto;
-                let dadosGrafico = null;
-
-                const matchJson = texto.match(/```json([\s\S]*?)```/);
-                if (matchJson) {
-                    try {
-                        const jsonParsed = JSON.parse(matchJson[1].trim());
-                        if (jsonParsed.tipo === "grafico") {
-                            dadosGrafico = jsonParsed;
-                            textoFormatado = texto.replace(matchJson[0], "");
-                        }
-                    } catch (e) {
-                        console.error("Erro ao ler JSON:", e);
-                    }
-                }
-
-                div.innerHTML = marked.parse(textoFormatado);
-                adicionarBotoesCopiar(div);
-                div.querySelectorAll("a").forEach(a => a.target = "_blank");
-
-                if (dadosGrafico) {
-                    const containerChart = document.createElement("div");
-                    containerChart.className = "chart-container";
-                    const canvas = document.createElement("canvas");
-                    containerChart.appendChild(canvas);
-                    div.appendChild(containerChart);
-
-                    setTimeout(() => {
-                        new Chart(canvas.getContext('2d'), {
-                            type: 'line',
-                            data: {
-                                labels: dadosGrafico.rotulos,
-                                datasets: [{
-                                    label: dadosGrafico.titulo || 'Simulação de Experimento',
-                                    data: dadosGrafico.dados,
-                                    borderColor: '#38bdf8',
-                                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                                    fill: true,
-                                    tension: 0.3
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: { legend: { labels: { color: '#94a3b8' } } },
-                                scales: {
-                                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#1f2937' } },
-                                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#1f2937' } }
-                                }
-                            }
-                        });
-                    }, 100);
-                }
-
+            if (classe === "ai-message" && !texto.startsWith("⚠️") && typeof marked !== "undefined") {
+                div.innerHTML = marked.parse(texto);
             } else {
-                div.innerHTML = texto.replace(/\n/g, '<br>'); 
+                div.innerHTML = texto.replace(/\n/g, '<br>');
             }
-            
+
+            if (classe === "ai-message" && !texto.startsWith("⚠️")) {
+                const acoesDiv = document.createElement("div");
+                acoesDiv.className = "msg-actions";
+
+                const btnFalar = document.createElement("button");
+                btnFalar.className = "speak-btn";
+                btnFalar.innerHTML = "🔊 Ouvir";
+                btnFalar.onclick = () => falarTexto(texto);
+
+                acoesDiv.appendChild(btnFalar);
+                div.appendChild(acoesDiv);
+            }
+
             if (chatBox) {
                 chatBox.appendChild(div);
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
         }
 
-        function adicionarBotoesCopiar(containerDiv) {
-            containerDiv.querySelectorAll("pre").forEach((bloco) => {
-                if (bloco.querySelector(".copy-btn")) return;
-                const botaoCopiar = document.createElement("button");
-                botaoCopiar.className = "copy-btn";
-                botaoCopiar.innerHTML = "📋 Copiar";
-                
-                botaoCopiar.onclick = function() {
-                    const codigo = bloco.querySelector("code").innerText;
-                    navigator.clipboard.writeText(codigo); 
-                    botaoCopiar.innerHTML = "✅ Copiado!"; 
-                    setTimeout(() => { botaoCopiar.innerHTML = "📋 Copiar"; }, 2000); 
-                };
-                
-                bloco.appendChild(botaoCopiar); 
-            });
+        function falarTexto(textoLimpo) {
+            if (!window.speechSynthesis) {
+                alert("O seu navegador não suporta leitura de voz.");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textoLimpo.replace(/[*#_`]/g, ''));
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1.0;
+            window.speechSynthesis.speak(utterance);
         }
     </script>
 </body>
 </html>
+
